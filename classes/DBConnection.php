@@ -3,22 +3,23 @@ class DBConnection
 {
 	private static $instance = null;
 	private $id = 0;
-	static function getInstance($host,$user,$pass,$dbName)
+	public static function getConnection($host,$user,$pass,$dbName)
 	{
 		if (self::$instance == null)
 		{
 			self::$instance = new DBConnection(mysql_connect($host,$user,$pass));
-			selectDB($dbName);
+						self::$instance->SelectDB($dbName);
 		}
 		return self::$instance;
 	}
-	public function changeSelectDB($name)
+	public function SelectDB($name)
 	{
-		mysql_select_db($name,$id);
+		mysql_select_db($name,$this->id);
 	}
 	public function addQuery($sql)
 	{
-		mysql_query($sql) or die(mysql_error());
+		$result = mysql_query($sql) or die(mysql_error());
+		return $result;
 	}
 	public function getID()
 	{
